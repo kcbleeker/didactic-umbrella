@@ -23,7 +23,6 @@ bot.onText(/\/start/i, function (msg, match) {
 bot.onText(/^\/addvalue[\s]+(.+\s*)+/ig, function (msg, match) {
 	var fromId = msg.chat.id || msg.from.id;
 	var params = match[1].split(" ", 2);	
-	console.log("received message: ", params);
 	
 	var userid = params[0].toLowerCase();
 	var addvalue = parseInt(params[1]);
@@ -36,14 +35,16 @@ bot.onText(/^\/addvalue[\s]+(.+\s*)+/ig, function (msg, match) {
 	var db = JSON.parse(fs.readFileSync("accounts.json"));
 	
 	if(db[userid]){
-		db.userid += addvalue;
+		db[userid] += addvalue;
+		console.log("Update value for " + userid)
 	}
 	else {
-		db.userid = addvalue;
+		db[userid] = addvalue;
+		console.log("Added user " + userid)
 	}
-	var newvalue = db.userid
+	var newvalue = db[userid];
 	
-	fs.writeFileSync(JSON.stringify(db));
+	fs.writeFileSync("accounts.json", JSON.stringify(db));
 	
 	bot.sendMessage(fromId, params[0] + " total now at " + newvalue.toString(), msgoptions);
 });
@@ -52,7 +53,6 @@ bot.onText(/^\/addvalue[\s]+(.+\s*)+/ig, function (msg, match) {
 bot.onText(/^\/showvalue[\s]+(.+\s*)+/ig, function (msg, match) {
 	var fromId = msg.chat.id || msg.from.id;
 	var params = match[1].split(" ", 1);	
-	console.log("received message: ", params);
 	
 	var userid = params[0].toLowerCase();
 	
@@ -64,7 +64,7 @@ bot.onText(/^\/showvalue[\s]+(.+\s*)+/ig, function (msg, match) {
 	var db = JSON.parse(fs.readFileSync("accounts.json"));
 	
 	if(db[userid]){
-		bot.sendMessage(fromId, params[0] + " total now at " + db.userid.toString(), msgoptions);
+		bot.sendMessage(fromId, params[0] + " total is " + db[userid].toString(), msgoptions);
 	}
 	else {		
 		bot.sendMessage(fromId, params[0] + " not present in DB", msgoptions);
