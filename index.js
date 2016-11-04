@@ -22,7 +22,7 @@ bot.onText(/\/start/i, function (msg, match) {
 //incoming telegram /addvalue
 bot.onText(/^\/addvalue[\s]+(.+\s*)+/ig, function (msg, match) {
 	var fromId = msg.chat.id || msg.from.id;
-	var params = match[1].split(/\s*/, 2);	
+	var params = match[1].split(" ", 2);	
 	console.log("received message: ", params);
 	
 	var userid = params[0].toLowerCase();
@@ -51,7 +51,7 @@ bot.onText(/^\/addvalue[\s]+(.+\s*)+/ig, function (msg, match) {
 //incoming telegram /addvalue
 bot.onText(/^\/showvalue[\s]+(.+\s*)+/ig, function (msg, match) {
 	var fromId = msg.chat.id || msg.from.id;
-	var params = match[1].split(/\s*/, 1);	
+	var params = match[1].split(" ", 1);	
 	console.log("received message: ", params);
 	
 	var userid = params[0].toLowerCase();
